@@ -1,5 +1,6 @@
 package agh.tw;
 
+
 import agh.tw.utils.Timer;
 
 public class Philosopher extends Thread {
@@ -7,19 +8,21 @@ public class Philosopher extends Thread {
     private final Table table;
     private int eatingCounter = 0;
     private final Timer timer = new Timer();
-    int leftIndex, rightIndex;
+    private final int iterations;
+    private final int leftIndex;
+    private final int rightIndex;
 
-
-    Philosopher(int index, Table table) {
+    Philosopher(int index, Table table, int iterations) {
         this.index = index;
         this.table = table;
         leftIndex = (index == 0) ? table.getSize() - 1 : index - 1;
         rightIndex = index;
+        this.iterations = iterations;
     }
 
     @Override
     public synchronized void run() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < iterations; i++) {
             timer.startTime();
             try {
                 table.getSticks().get(leftIndex).acquire();

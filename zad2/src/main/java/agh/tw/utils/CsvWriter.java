@@ -1,5 +1,6 @@
 package agh.tw.utils;
 
+
 import agh.tw.Table;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class CsvWriter {
 
         table.getPhilosophers().forEach(philosopher -> dataLines.add(String.valueOf(philosopher.getTimer().getAverageWaitingTime())));
 
-        File csvOutputFile = new File("src/agh/tw/results/result2.csv");
+        File csvOutputFile = new File("src/main/java/agh/tw/results/result.csv");
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             dataLines.forEach(pw::println);
         }
