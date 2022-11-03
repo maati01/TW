@@ -25,6 +25,7 @@ public class Main {
         });
 
         saveResults(table);
+        System.out.println("DONE!");
 
     }
 
@@ -45,6 +46,7 @@ public class Main {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            System.out.println("Results have been saved!");
         }
     }
 }

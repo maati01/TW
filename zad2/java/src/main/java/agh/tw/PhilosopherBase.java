@@ -30,28 +30,8 @@ public class PhilosopherBase extends Thread {
         }
     }
 
-//    @Override
-//    public synchronized void run() {
-//        for (int i = 0; i < iterations; i++) {
-//            timer.startTime();
-//            try {
-//                table.getSticks().get(leftIndex).acquire();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            if (table.getSticks().get(rightIndex).tryAcquire()) {
-//                timer.stopTime();
-//                eat();
-//                table.getSticks().get(rightIndex).release();
-//            }
-//            table.getSticks().get(leftIndex).release();
-//            think();
-//        }
-//
-//    }
-
     public void eat() {
-        System.out.println("Philosopher " + index + " is starting to eat.");
+        System.out.println("Philosopher " + index + " begins to eat.");
         try {
             sleep(50);
         } catch (InterruptedException e) {
@@ -62,7 +42,7 @@ public class PhilosopherBase extends Thread {
     }
 
     public void think() {
-        System.out.println("Philosopher " + index + " is starting to think.");
+        System.out.println("Philosopher " + index + " begins to think.");
         try {
             sleep(75);
         } catch (InterruptedException e) {

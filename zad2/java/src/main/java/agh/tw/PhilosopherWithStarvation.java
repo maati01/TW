@@ -1,7 +1,7 @@
 package agh.tw;
 
-public class Philosopher extends PhilosopherBase{
-    Philosopher(int index, Table table, int iterations) {
+public class PhilosopherWithStarvation extends PhilosopherBase{
+    PhilosopherWithStarvation(int index, Table table, int iterations) {
         super(index, table, iterations);
     }
 

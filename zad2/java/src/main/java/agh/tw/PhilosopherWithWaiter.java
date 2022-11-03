@@ -1,7 +1,7 @@
 package agh.tw;
 
 public class PhilosopherWithWaiter extends PhilosopherBase{
-    private Waiter waiter;
+    private final Waiter waiter;
 
     PhilosopherWithWaiter(int index, Table table, int iterations, Waiter waiter) {
         super(index, table, iterations);

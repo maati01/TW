@@ -21,8 +21,9 @@ public class Table {
     private void createBasicPhilosophers(int iterations){
         for(int i = 0; i < sticksNumber; i++){
             sticks.add(new Stick(1));
-            philosophers.add(new Philosopher(i, this, iterations));
+            philosophers.add(new PhilosopherWithStarvation(i, this, iterations));
         }
+        System.out.println("Created basic philosophers.");
     }
 
     private void createPhilosophersWithWaiter(int iterations){
@@ -31,6 +32,7 @@ public class Table {
             sticks.add(new Stick(1));
             philosophers.add(new PhilosopherWithWaiter(i, this, iterations, waiter));
         }
+        System.out.println("Created a philosophers with a waiter.");
     }
 
     public List<Stick> getSticks(){
