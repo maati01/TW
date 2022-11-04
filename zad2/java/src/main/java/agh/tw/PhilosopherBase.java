@@ -12,6 +12,8 @@ public class PhilosopherBase extends Thread {
     protected final int iterations;
     protected final int leftIndex;
     protected final int rightIndex;
+    private final int THINKING_TIME = 10;
+    private final int EATING_TIME = 5;
 
     PhilosopherBase(int index, Table table, int iterations) {
         this.index = index;
@@ -33,7 +35,7 @@ public class PhilosopherBase extends Thread {
     public void eat() {
         System.out.println("Philosopher " + index + " begins to eat.");
         try {
-            sleep(50);
+            sleep(EATING_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -44,7 +46,7 @@ public class PhilosopherBase extends Thread {
     public void think() {
         System.out.println("Philosopher " + index + " begins to think.");
         try {
-            sleep(75);
+            sleep(THINKING_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

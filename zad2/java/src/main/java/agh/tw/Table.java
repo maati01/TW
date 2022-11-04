@@ -23,7 +23,7 @@ public class Table {
             sticks.add(new Stick(1));
             philosophers.add(new PhilosopherWithStarvation(i, this, iterations));
         }
-        System.out.println("Created basic philosophers.");
+        System.out.println("Basic philosophers have been created.");
     }
 
     private void createPhilosophersWithWaiter(int iterations){
@@ -32,7 +32,7 @@ public class Table {
             sticks.add(new Stick(1));
             philosophers.add(new PhilosopherWithWaiter(i, this, iterations, waiter));
         }
-        System.out.println("Created a philosophers with a waiter.");
+        System.out.println("Philosophers with a waiter have been created.");
     }
 
     public List<Stick> getSticks(){

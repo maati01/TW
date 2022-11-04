@@ -103,6 +103,8 @@ Philosopher.prototype.startAsym = function (count) {
     var forks = this.forks,
         f1 = this.id % 2 == 0 ? this.f1 : this.f2,
         f2 = this.id % 2 == 0 ? this.f2 : this.f1,
+        side1 = this.id % 2 == 0 ? "right" : "left",
+        side2 = this.id % 2 !== 0 ? "right" : "left",
         id = this.id,
         philosopher = this;
 
@@ -122,10 +124,10 @@ Philosopher.prototype.startAsym = function (count) {
         philosopher.startWaitTime = new Date().getTime();
         setTimeout(function () {
             forks[f1].acquire(function () {
-                console.log("Philosopher " + id + " took the left fork.");
+                console.log("Philosopher " + id + " took the " + side1 + " fork.");
                 forks[f2].acquire(function () {
                     philosopher.totalWaitTime += new Date().getTime() - philosopher.startWaitTime;
-                    console.log("Philosopher " + id + " took the right fork.");
+                    console.log("Philosopher " + id + " took the " + side2 + " fork.");
                     console.log("Philosopher " + id + " begins to eat.");
                     setTimeout(function () {
                         forks[f1].release();
@@ -176,8 +178,10 @@ Conductor.prototype.release = function () {
 
 Philosopher.prototype.startConductor = function (count, conductor) {
     var forks = this.forks,
-        f1 = this.f1,
-        f2 = this.f2,
+        f1 = this.id % 2 == 0 ? this.f1 : this.f2,
+        f2 = this.id % 2 == 0 ? this.f2 : this.f1,
+        side1 = this.id % 2 == 0 ? "right" : "left",
+        side2 = this.id % 2 !== 0 ? "right" : "left",
         id = this.id,
         philosopher = this;
 
@@ -197,10 +201,10 @@ Philosopher.prototype.startConductor = function (count, conductor) {
         setTimeout(function () {
             conductor.acquire(function () {
                 forks[f1].acquire(function () {
-                    console.log("Philosopher " + id + " took the left fork.");
+                    console.log("Philosopher " + id + " took the " + side1 + " fork.");
                     forks[f2].acquire(function () {
                         philosopher.totalWaitTime += new Date().getTime() - philosopher.startWaitTime;
-                        console.log("Philosopher " + id + " took the right fork.");
+                        console.log("Philosopher " + id + " took the " + side2 + " fork.");
                         console.log("Philosopher " + id + " begins to eat.");
                         setTimeout(function () {
                             forks[f1].release();

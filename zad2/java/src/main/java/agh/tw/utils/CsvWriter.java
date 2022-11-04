@@ -11,17 +11,19 @@ import java.util.List;
 
 public class CsvWriter {
     Table table;
+    private final String PATH_TO_RESULTS = "src/main/java/agh/tw/results/";
 
-    public CsvWriter(Table table){
+    public CsvWriter(Table table) {
         this.table = table;
     }
 
-    public void writeToCsv() throws FileNotFoundException {
+    public void writeToCsv(int sticksNumber, int iterations, boolean isWaiter) throws FileNotFoundException {
         List<String> dataLines = new ArrayList<>();
 
         table.getPhilosophers().forEach(philosopher -> dataLines.add(String.valueOf(philosopher.getTimer().getAverageWaitingTime())));
 
-        File csvOutputFile = new File("src/main/java/agh/tw/results/result.csv");
+        String fileName = (isWaiter) ? "conductor" : "both_forks";
+        File csvOutputFile = new File(PATH_TO_RESULTS + fileName + "_" + sticksNumber + "_" + iterations + ".txt");
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             dataLines.forEach(pw::println);
         }

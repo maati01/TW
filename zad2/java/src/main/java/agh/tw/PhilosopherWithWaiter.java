@@ -2,6 +2,7 @@ package agh.tw;
 
 public class PhilosopherWithWaiter extends PhilosopherBase{
     private final Waiter waiter;
+    private final int SLEEP_TIME = 10;
 
     PhilosopherWithWaiter(int index, Table table, int iterations, Waiter waiter) {
         super(index, table, iterations);
@@ -15,7 +16,7 @@ public class PhilosopherWithWaiter extends PhilosopherBase{
 
             while (!waiter.tryAcquire()) {
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(SLEEP_TIME);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -42,7 +42,7 @@ public class Main {
         if(save) {
             CsvWriter csvWriter = new CsvWriter(table);
             try {
-                csvWriter.writeToCsv();
+                csvWriter.writeToCsv(sticksNumber, iterations, isWaiter);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
