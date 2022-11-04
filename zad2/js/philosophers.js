@@ -50,7 +50,7 @@ var Philosopher = function (id, forks) {
     this.f1 = id % forks.length;
     this.f2 = (id + 1) % forks.length;
     this.totalWaitTime = 0;
-    this.startWaitTime = -1;
+    this.startWaitTime = 0;
 
     return this;
 }
@@ -66,9 +66,16 @@ Philosopher.prototype.startNaive = function (count) {
     // każdy filozof powinien 'count' razy wykonywać cykl
     // podnoszenia widelców -- jedzenia -- zwalniania widelców
 
-    var recNaive = function (count) {
+    var naive = function (count) {
+
+        if (count == 0) {
+            FINISHED_PHILOSOPHERS++;
+            console.log("Philosopher " + id + " finished processing.");
+            return;
+        }
+
         philosopher.startWaitTime = new Date().getTime();
-        if (count > 0) {
+        setTimeout(function () {
             forks[f1].acquire(function () {
                 console.log("Philosopher " + id + " took the left fork.");
                 forks[f2].acquire(function () {
@@ -80,21 +87,16 @@ Philosopher.prototype.startNaive = function (count) {
                         forks[f2].release();
                         console.log("Philosopher " + id + " finished eating.");
                         console.log("Philosopher " + id + " begins to think.");
-                        setTimeout(function () {
-                            console.log("Philosopher " + id + " finished thinking.");
-                        }, 10)
-                        recNaive(count - 1);
-                    }, 5)
+                        naive(count - 1);
+                    }, EATING_TIME)
                 })
             })
+        }, THINKING_TIME)
 
-        } else {
-            FINISHED_PHILOSOPHERS++;
-        }
     };
 
     //losowe opóźnienie przy starcie, żeby uniknąć zakleczenia na samym początku 
-    setTimeout(function () { recNaive(count) }, Math.floor(Math.random() * 100));
+    setTimeout(function () { naive(count) }, Math.floor(Math.random() * 100));
 }
 
 Philosopher.prototype.startAsym = function (count) {
@@ -109,9 +111,16 @@ Philosopher.prototype.startAsym = function (count) {
     // każdy filozof powinien 'count' razy wykonywać cykl
     // podnoszenia widelców -- jedzenia -- zwalniania widelców
 
-    var recAsym = function (count) {
+    var asym = function (count) {
+
+        if (count == 0) {
+            FINISHED_PHILOSOPHERS++;
+            console.log("Philosopher " + id + " finished processing.");
+            return;
+        }
+
         philosopher.startWaitTime = new Date().getTime();
-        if (count > 0) {
+        setTimeout(function () {
             forks[f1].acquire(function () {
                 console.log("Philosopher " + id + " took the left fork.");
                 forks[f2].acquire(function () {
@@ -123,19 +132,14 @@ Philosopher.prototype.startAsym = function (count) {
                         forks[f2].release();
                         console.log("Philosopher " + id + " finished eating.");
                         console.log("Philosopher " + id + " begins to think.");
-                        setTimeout(function () {
-                            console.log("Philosopher " + id + " finished thinking.");
-                        }, 10)
-                        recAsym(count - 1);
-                    }, 5)
+                        asym(count - 1);
+                    }, EATING_TIME)
                 })
             })
-        } else {
-            FINISHED_PHILOSOPHERS++;
-        }
+        }, THINKING_TIME)
     };
 
-    recAsym(count);
+    asym(count);
 }
 
 //semafor ilosciowy dla kelnera 
@@ -155,7 +159,10 @@ Conductor.prototype.acquire = function (cb) {
                 conductor.state--;
                 cb();
             } else {
-                acquire(waitTime * 2);
+                if (waitTime < 4096)
+                    acquire(waitTime * 2);
+                else
+                    acquire(waitTime)
             }
         }, waitTime)
     };
@@ -178,9 +185,16 @@ Philosopher.prototype.startConductor = function (count, conductor) {
     // każdy filozof powinien 'count' razy wykonywać cykl
     // podnoszenia widelców -- jedzenia -- zwalniania widelców
 
-    var recConductor = function (count) {
+    var conductorFunc = function (count) {
+
+        if (count == 0) {
+            FINISHED_PHILOSOPHERS++;
+            console.log("Philosopher " + id + " finished processing.");
+            return;
+        }
+
         philosopher.startWaitTime = new Date().getTime();
-        if (count > 0) {
+        setTimeout(function () {
             conductor.acquire(function () {
                 forks[f1].acquire(function () {
                     console.log("Philosopher " + id + " took the left fork.");
@@ -194,22 +208,18 @@ Philosopher.prototype.startConductor = function (count, conductor) {
                             conductor.release();
                             console.log("Philosopher " + id + " finished eating.");
                             console.log("Philosopher " + id + " begins to think.");
-                            setTimeout(function () {
-                                console.log("Philosopher " + id + " finished thinking.");
-                            }, 5)
-                            recConductor(count - 1);
-                        }, 10)
+                            conductorFunc(count - 1);
+                        }, Math.ceil(Math.random() * 5))
                     })
                 })
 
             }
             )
-        } else {
-            FINISHED_PHILOSOPHERS++;
-        }
+        }, Math.ceil(Math.random() * 75))
+
     };
 
-    recConductor(count);
+    conductorFunc(count);
 }
 
 
@@ -241,9 +251,16 @@ Philosopher.prototype.startBothForks = function (count) {
         id = this.id,
         philosopher = this;
 
-    var recBothForks = function (count) {
+    var bothForks = function (count) {
+
+        if (count == 0) {
+            FINISHED_PHILOSOPHERS++;
+            console.log("Philosopher " + id + " finished processing.");
+            return;
+        }
+
         philosopher.startWaitTime = new Date().getTime();
-        if (count > 0) {
+        setTimeout(function () {
             philosopher.acquireBothForks(function () {
                 console.log("Philosopher " + id + " took the left fork.");
                 philosopher.totalWaitTime += new Date().getTime() - philosopher.startWaitTime;
@@ -254,29 +271,18 @@ Philosopher.prototype.startBothForks = function (count) {
                     forks[f2].release();
                     console.log("Philosopher " + id + " finished eating.");
                     console.log("Philosopher " + id + " begins to think.");
-                    setTimeout(function () {
-                        console.log("Philosopher " + id + " finished thinking.");
-                    }, 10)
-                    recBothForks(count - 1);
-                }, 5)
-
+                    bothForks(count - 1);
+                }, EATING_TIME)
             })
-        } else {
-            FINISHED_PHILOSOPHERS++;
-        }
+        }, THINKING_TIME)
     };
 
-    recBothForks(count);
+    bothForks(count);
 }
 
 function saveResults(philosophers, N, count, version) {
-    var today = new Date();
-    var date = today.getFullYear() + '_' + (today.getMonth() + 1) + '_' + today.getDate();
-    var time = today.getHours() + "_" + today.getMinutes() + "_" + today.getSeconds();
-    var dateTime = date + ' ' + time;
-
     var fs = require('fs')
-    var logger = fs.createWriteStream(`results/${version}_${N}_${count}_${dateTime}.txt`, {
+    var logger = fs.createWriteStream(`results/${version}_${N}_${count}.txt`, {
         flags: 'a'
     })
 
@@ -290,12 +296,15 @@ function saveResults(philosophers, N, count, version) {
 function waitFor(conditionFunction) {
 
     const poll = resolve => {
-      if(conditionFunction()) resolve();
-      else setTimeout(_ => poll(resolve), 400);
+        if (conditionFunction()) resolve();
+        else setTimeout(_ => poll(resolve), 400);
     }
-  
+
     return new Promise(poll);
-  }
+}
+
+const THINKING_TIME = 10;
+const EATING_TIME = 5;
 
 const args = process.argv.slice(2);
 var N = parseInt(args[0]);
@@ -324,8 +333,7 @@ for (var i = 0; i < N; i++) {
         philosophers[i].startConductor(count, conductor);
     else if (version === 'both_forks')
         philosophers[i].startBothForks(count);
-
 }
 
 waitFor(_ => N === FINISHED_PHILOSOPHERS)
-  .then(_ => saveResults(philosophers, N, count, version));
+    .then(_ => saveResults(philosophers, N, count, version));
